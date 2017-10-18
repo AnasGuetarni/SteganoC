@@ -1,4 +1,4 @@
-le ppm.c
+/*
  * @author Group12 - Guetarni Anas - Gay Melvin - Keraim Marwan
  * @date 18 Oct 2017
  * @brief Routines to read and write PPM files.
@@ -27,4 +27,3 @@ int main(int argc, const char * argv[]) {
 
 
 }
-
