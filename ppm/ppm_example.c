@@ -15,6 +15,9 @@
  * Display the program's syntaxe.
  * @param argv program's command line arguments
  */
+
+int convertDecimalToBinary(int n);
+
 void usage(char **argv) {
 	fprintf(stderr, "usage: %s [-ascii] input output\n"\
 			"Where input and output are PPM files and the optional argument\n"\
@@ -52,13 +55,22 @@ int main(int argc, char **argv) {
 		return EXIT_FAILURE;
 	}
 
+	printf("Height: %d\n", img->height);
+	printf("Width: %d\n", img->width);
+
 	// Reduce image's first quadrant's brightness intensity
-	for (int j = 0; j < img->height/2; j++) {
-		for (int i = 0; i < img->width/2; i++) {
+	for (int j = 0; j < img->height; j++) {
+		for (int i = 0; i < img->width; i++) {
 			pixel_t *p = &img->pix[j][i];
-			p->r /= 2;
-			p->g /= 2;
-			p->b /= 2;
+
+			printf("r: %d\n",(uint32_t)p->r);
+			printf("g: %d\n",(uint32_t)p->g);
+			printf("b: %d\n",(uint32_t)p->b);
+
+			printf("r to bin : %i\n", convertDecimalToBinary(p->r));
+			p->r;
+			p->g;
+			p->b;
 		}
 	}
 
@@ -71,4 +83,18 @@ int main(int argc, char **argv) {
 
 	free_img(img);
 	return EXIT_SUCCESS;
+}
+
+int convertDecimalToBinary(int n)
+{
+		int binaryNumber = 0;
+		int remainder, i = 1, step = 1;
+		while (n!=0)
+		{
+				remainder = n%2;
+				n /= 2;
+				binaryNumber += remainder*i;
+				i *= 10;
+		}
+		return binaryNumber;
 }
