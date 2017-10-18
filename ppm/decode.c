@@ -14,7 +14,7 @@ le ppm.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "ppm.h"
 /**
  * Allocate the memory for an image of size width*height
  * @param width the width of the image to allocate
