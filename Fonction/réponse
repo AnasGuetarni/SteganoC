@@ -1,0 +1,4 @@
+l'implémentation du programme n'est pas correcte 
+
+- le comportement est incorrecte car la boucle n'attendra pas que le thread est
+fini d'executer sa fonction 
