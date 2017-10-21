@@ -2,6 +2,8 @@
 #include <stdio.h>                                                    
 #include <stdlib.h>
 
+// Cette fonction remplace par 0 ou par 1 le bit de poids faible dans 
+// un nombre binaire donnée
 // nb : nombre binaire , bits: 0 ou 1
 unsigned char bitFaible(unsigned char nb, int bits)
 {
@@ -45,84 +47,42 @@ void extractionFichier(unsigned char *c)
 	fclose(fichier);
 }
 
-void ecritureRGB(unsigned char* fichier,unsigned char r, unsigned char g, unsigned char b)
+void ecritureRGB(unsigned char* fichier,unsigned char* r, unsigned char* g, unsigned char* b)
 {
-	// masque pour extraire les bits des valeurs rgb une par une  UTILISATION D'UN (ET) LOGIQUE
-	unsigned char masq[7];
-	masq[0]=0x01; // extraction du bit au rang 2^0
-	masq[1]=0x02; // extraction du bit au rang 2^1
-	masq[2]=0x04; // extraction du bit au rang 2^2
-	masq[3]=0x08;
-	masq[4]=0x10;
-	masq[5]=0x20;
-	masq[6]=0x40;
+	// masque pour extraire les bits des valeurs RGB une par une  UTILISATION D'UN (ET) LOGIQUE
+	// Ces masques serviront a extraire chaque bits d'un caractère
+	unsigned char masq[7] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40};
 
-	printf("cara : %x \n",fichier[0]);
+	// BOUCLE UNIQUEMENT POUR LE PREMIER CARACTERE fichier[0]  a modifier pour faire tous les carctères
+	// On considére que le bits 2^0 du caractére ira dans le bit de poids faible de R. L'ordre est le suivant R->G->B
+	int bits=0;
 
-
-	// BOUCLE UNIQUEMENT POUR LE PREMIER CARACTERE fichier[0]  a modifier pour faire tous les carcteres
-	int i, bits=0;
-	for (i=0; i < 3; i++)
-	{
-		if ((masq[i]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+		if ((masq[0]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
 			bits = 1;
 		else // si tous les bits sont a zero c'est que le bits rechercher vaut 0
 			bits = 0;
  
-		r = bitFaible(r,bits);
+		// On enregistre le bit 2^0 du caractère dans le nombre binaire R (RGB)
+		*r = bitFaible(*r,bits);
 
-		if ((masq[i+1]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+		if ((masq[1]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+			bits = 1;
+		else
+			bits = 0;
+
+		
+		*g = bitFaible(*g,bits);
+
+		if ((masq[2]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
                         bits = 1;
                 else
                         bits = 0;
 
-		g = bitFaible(g,bits);
-
-		if ((masq[i+2]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-                        bits = 1;
-                else
-                        bits = 0;
-		b = bitFaible(b,bits);
+		*b = bitFaible(*b,bits);
 
 // TROUVER UN MOYEN DE DONNER LES VALEURS RGB DU PROCHAIN PIXEL
 
-/*	if ((masq[i]&fichier[1]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-                        bits = 1;
-                else
-                        bits = 0;
-
-                r = bitFaible(r,bits);
-
-                if ((masq[i+1]&fichier[1]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-                        bits = 1;
-                else
-                        bits = 0;
-
-                g = bitFaible(g,bits);
-
-                if ((masq[i+2]&fichier[1]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-                        bits = 1;
-                else
-                        bits = 0;
-                b = bitFaible(b,bits);
-
-
-
-if ((masq[i]&fichier[1]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-                        bits = 1;
-                else
-                        bits = 0;
-
-                r = bitFaible(r,bits);*/
-
-	}
-
-
-
 }
-
-
-
 
 int main() {
 	// simulation de (r,g,b)
@@ -130,14 +90,13 @@ int main() {
 	unsigned char g = 0x64; // (2)
 	unsigned char b = 0x98; // (2)
 
-	r = bitFaible(r, 1);
 	printf("r avant : %x \n",r);
 	printf("g avant : %x \n",g);
 	printf("b avant : %x \n",b);
 
-	unsigned char *fichier[15];
-        extractionFichier(fichier);
-	ecritureRGB(fichier, r,g,b);
+	unsigned char fichier[15];
+	extractionFichier(fichier);
+	ecritureRGB(fichier, &r,&g,&b);
 
 	printf("r apres : %x \n",r);
 	printf("g apres : %x \n",g);
@@ -145,4 +104,3 @@ int main() {
 
     return 0;
 }
-
