@@ -58,19 +58,18 @@ int main(int argc, char **argv) {
 	printf("Height: %d\n", img->height);
 	printf("Width: %d\n", img->width);
 
+	
+
 	// Reduce image's first quadrant's brightness intensity
 	for (int j = 0; j < img->height; j++) {
 		for (int i = 0; i < img->width; i++) {
 			pixel_t *p = &img->pix[j][i];
 
-			printf("r: %d\n",(uint32_t)p->r);
-			printf("g: %d\n",(uint32_t)p->g);
-			printf("b: %d\n",(uint32_t)p->b);
 
-			printf("r to bin : %i\n", convertDecimalToBinary(p->r));
-			p->r;
-			p->g;
-			p->b;
+			/*printf("r: %d\n",(uint32_t)p->r);
+			printf("g: %d\n",(uint32_t)p->g);
+			printf("b: %d\n",(uint32_t)p->b);*/
+
 		}
 	}
 
