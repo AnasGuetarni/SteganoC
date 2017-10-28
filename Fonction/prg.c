@@ -27,7 +27,7 @@ void extractionFichier(unsigned char *c)
 	int i =0;
     int caractere = 0;
     FILE* fichier = NULL;
-    fichier = fopen("coucou.txt", "r");
+    fichier = fopen("gulliver.txt", "r");
 
     if (fichier != NULL)
     {
@@ -40,7 +40,7 @@ void extractionFichier(unsigned char *c)
     }
     else
     {
-        // On affiche un message d'erreur si on veut
+        // On affiche un message d'erreur
         printf("Impossible d'ouvrir le fichier coucou.txt");
     }
 
@@ -54,34 +54,52 @@ void ecritureRGB(unsigned char* fichier,unsigned char* r, unsigned char* g, unsi
 	unsigned char masq[7] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40};
 
 	// BOUCLE UNIQUEMENT POUR LE PREMIER CARACTERE fichier[0]  a modifier pour faire tous les carctères
-	// On considére que le bits 2^0 du caractére ira dans le bit de poids faible de R. L'ordre est le suivant R->G->B
+	// On considére que le bits 2^0 du caractére ira en premier dans le bit de poids faible de R. L'ordre est le suivant R->G->B
 	int bits=0;
 
-		if ((masq[0]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-			bits = 1;
-		else // si tous les bits sont a zero c'est que le bits rechercher vaut 0
-			bits = 0;
+	if ((masq[0]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+		bits = 1;
+	else // si tous les bits sont a zero c'est que le bits rechercher vaut 0
+		bits = 0;
  
-		// On enregistre le bit 2^0 du caractère dans le nombre binaire R (RGB)
-		*r = bitFaible(*r,bits);
+	// On enregistre le bit 2^0 du caractère dans le nombre binaire R (RGB)
+	*r = bitFaible(*r,bits);
 
-		if ((masq[1]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-			bits = 1;
-		else
-			bits = 0;
+	if ((masq[1]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+		bits = 1;
+	else
+		bits = 0;
 
-		
-		*g = bitFaible(*g,bits);
+	
+	*g = bitFaible(*g,bits);
 
-		if ((masq[2]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-                        bits = 1;
-                else
-                        bits = 0;
+	if ((masq[2]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+            bits = 1;
+    else
+            bits = 0;
 
-		*b = bitFaible(*b,bits);
+	*b = bitFaible(*b,bits);
+	
+	
 
 // TROUVER UN MOYEN DE DONNER LES VALEURS RGB DU PROCHAIN PIXEL
 
+}
+
+long sizeFile(char *nom)
+{
+    FILE *fichier;
+    long size;
+ 
+    fichier=fopen(nom,"rb");
+ 
+    if(fichier)
+    {
+            fseek(fichier, 0, SEEK_END);
+            size=ftell(fichier);
+            fclose (fichier);          
+    }
+    return size;
 }
 
 int main() {
@@ -94,9 +112,22 @@ int main() {
 	printf("g avant : %x \n",g);
 	printf("b avant : %x \n",b);
 
-	unsigned char fichier[15];
+	long size = sizeFile("gulliver.txt");
+	
+	printf("taille :  %ld \n", size);
+	
+	unsigned char *fichier = NULL;
+	
+    fichier = malloc(size*sizeof(unsigned char));
+    if (fichier == NULL) // Si l'allocation a échoué
+    {
+        exit(0); // On arrête immédiatement le programme
+    }
+	
 	extractionFichier(fichier);
 	ecritureRGB(fichier, &r,&g,&b);
+
+	free(fichier);
 
 	printf("r apres : %x \n",r);
 	printf("g apres : %x \n",g);
