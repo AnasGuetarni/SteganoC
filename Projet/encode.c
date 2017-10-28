@@ -16,6 +16,7 @@
 #include <libgen.h>
 #include <string.h>
 #include "encode_function.h"
+#include "ppm.h"
 
 /**
  * Display the program's syntaxe.

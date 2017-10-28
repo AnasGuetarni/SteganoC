@@ -1,13 +1,16 @@
 GCC=gcc -g -Wall -Wextra -std=gnu11
 
-ppm_example: ppm_example.o ppm.o
+encode: encode.o encode_function.o ppm.o
 	$(GCC) $^ -o $@
 
-ppm_example.o: ppm_example.c
+encode.o: encode.c
 	$(GCC) $< -c
 
-ppm.o: ppm.c ppm.h
+encode_function.o: encode_function.c encode_function.h
+	$(GCC) $< -c
+
+pm.o: ppm.c ppm.h
 	$(GCC) $< -c
 
 clean:
-	rm -f *.o ppm_example
+	rm -f *.o encode

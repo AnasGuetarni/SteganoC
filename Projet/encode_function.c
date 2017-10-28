@@ -58,7 +58,7 @@ void ecritureRGB(unsigned char* fichier,unsigned char* r, unsigned char* g, unsi
 	int bits=0;
 
 	/*-------------------------------------------*/
-	if (m == 7) // On a encoder les 7 bits du caractère
+	if (*m == 7) // On a encoder les 7 bits du caractère
 	{
 		m = 0;
 		f++; // on passe au caractère suivant
@@ -73,7 +73,7 @@ void ecritureRGB(unsigned char* fichier,unsigned char* r, unsigned char* g, unsi
 	m++;
 
 	/*---------------------------------------------*/
-	if (m == 7) // On a encoder les 7 bits du caractère
+	if (*m == 7) // On a encoder les 7 bits du caractère
 	{
 		m = 0;
 		f++; // on passe au caractère suivant
@@ -87,7 +87,7 @@ void ecritureRGB(unsigned char* fichier,unsigned char* r, unsigned char* g, unsi
 	m++;
 
 	/*----------------------------------------*/
-	if (m == 7) // On a encoder les 7 bits du caractère
+	if (*m == 7) // On a encoder les 7 bits du caractère
 	{
 		m = 0;
 		f++; // on passe au caractère suivant
