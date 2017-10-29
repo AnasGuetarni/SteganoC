@@ -149,3 +149,18 @@ int main() {
 
     return 0;
 }
+/*
+ * printf("r apres : %x \n",p->r);
+			printf("g apres : %x \n",p->g);
+			printf("b apres : %x \n",p->b);
+			printf("fichier : %x, numero : %d \n", fichier[f], f);
+			scanf("%d", &test);
+			printf("\n");
+
+
+			printf("r avant : %x \n",p->r);
+			printf("g avant : %x \n",p->g);
+			printf("b avant : %x \n",p->b);
+			printf("fichier : %x, numero : %d \n", fichier[f], f);
+			scanf("%d", &test);
+			printf("\n")*/

@@ -60,45 +60,45 @@ void ecritureRGB(unsigned char* fichier,unsigned char* r, unsigned char* g, unsi
 	/*-------------------------------------------*/
 	if (*m == 7) // On a encoder les 7 bits du caractère
 	{
-		m = 0;
-		f++; // on passe au caractère suivant
+		*m = 0;
+		*f = *f +1; // on passe au caractère suivant
 	}
-	if ((masq[0]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+	if ((masq[*m]&fichier[*f]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
 		bits = 1;
 	else // si tous les bits sont a zero c'est que le bits rechercher vaut 0
 		bits = 0;
 
 	// On enregistre le bit 2^0 du caractère dans le nombre binaire R (RGB)
 	*r = bitFaible(*r,bits);
-	m++;
+	*m = *m +1;
 
 	/*---------------------------------------------*/
 	if (*m == 7) // On a encoder les 7 bits du caractère
 	{
-		m = 0;
-		f++; // on passe au caractère suivant
+		*m = 0;
+		*f = *f +1; // on passe au caractère suivant
 	}
-	if ((masq[1]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+	if ((masq[*m]&fichier[*f]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
 		bits = 1;
 	else
 		bits = 0;
 
 	*g = bitFaible(*g,bits);
-	m++;
+	*m = *m +1;
 
 	/*----------------------------------------*/
 	if (*m == 7) // On a encoder les 7 bits du caractère
 	{
 		m = 0;
-		f++; // on passe au caractère suivant
+		*f = *f +1; // on passe au caractère suivant
 	}
-	if ((masq[2]&fichier[0]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+	if ((masq[*m]&fichier[*f]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
             bits = 1;
     else
             bits = 0;
 
 	*b = bitFaible(*b,bits);
-	m++;
+	*m = *m +1;
 }
 
 long sizeFile(char *nom)
