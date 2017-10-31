@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 
 	printf("Height: %d\n", img->height);
 	printf("Width: %d\n", img->width);
-	
+
 	long size = sizeFile("gulliver.txt");
 	printf("taille :  %ld \n", size);
 
@@ -75,7 +75,14 @@ int main(int argc, char **argv) {
     {
         exit(0); // On arrête immédiatement le programme
     }
-    
+
+		if ((size*3)<=(img->height*img->width)){
+			printf("La taille du texte est plus grande que la capacité de l'image\n");
+			exit(0);
+		}
+		else
+			printf("La taille du texte est plus petite que la taille de l'image (C'est bon !)\n");
+
     extractionFichier(fichier);
 
 	for (int j = 0; j < img->height; j++) {
@@ -84,7 +91,7 @@ int main(int argc, char **argv) {
 			ecritureRGB(fichier, &p->r,&p->g,&p->b,&m,&f,size);
 		}
 	}
-	
+
 	free(fichier);
 
 	// Write image
