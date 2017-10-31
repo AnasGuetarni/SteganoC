@@ -48,7 +48,7 @@ void extractionFichier(unsigned char *c)
 	fclose(fichier);
 }
 
-void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsigned char *b, int *m, int *f)
+void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsigned char *b, int *m, int *f, long taille)
 {
 	// masque pour extraire les bits des valeurs RGB une par une  UTILISATION D'UN (ET) LOGIQUE
 	// Ces masques serviront a extraire chaque bits d'un caractère
@@ -57,49 +57,54 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 	// On considére que le bits 2^0 du caractére ira en premier dans le bit de poids faible de R. L'ordre est le suivant R->G->B
 	int bits=0;
 
-	printf("m : %d, f : %d \n", *m, *f);
-	/*-------------------------------------------*/
-	if (*m == 7) // On a encoder les 7 bits du caractère
+	//printf("m : %d, f : %d \n", *m, *f);
+	
+	// Test qui permet d'arréter l'encodage quand tous les cartère on été encodé
+	if(*f < taille)
 	{
-		*m = 0;
-		*f = *f + 1; // on passe au caractère suivant
+		/*-------------------------------------------*/
+		if (*m == 7) // On a encoder les 7 bits du caractère
+		{
+			*m = 0;
+			*f = *f + 1; // on passe au caractère suivant
+		}
+		if ((masq[*m]&fichier[*f]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+			bits = 1;
+		else // si tous les bits sont a zero c'est que le bits rechercher vaut 0
+			bits = 0;
+	
+		// On enregistre le bit 2^0 du caractère dans le nombre binaire R (RGB)
+		*r = bitFaible(*r,bits);
+		*m = *m + 1;
+	
+		/*---------------------------------------------*/
+		if (*m == 7) // On a encoder les 7 bits du caractère
+		{
+			*m = 0;
+			*f = *f + 1; // on passe au caractère suivant
+		}
+		if ((masq[*m]&fichier[*f]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+			bits = 1;
+		else
+			bits = 0;
+	
+		*g = bitFaible(*g,bits);
+		*m = *m + 1;
+	
+		/*----------------------------------------*/
+		if (*m == 7) // On a encoder les 7 bits du caractère
+		{
+			*m = 0;
+			*f = *f + 1; // on passe au caractère suivant
+		}
+		if ((masq[*m]&fichier[*f]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
+	            bits = 1;
+	    else
+	            bits = 0;
+	
+		*b = bitFaible(*b,bits);
+		*m = *m + 1;
 	}
-	if ((masq[*m]&fichier[*f]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-		bits = 1;
-	else // si tous les bits sont a zero c'est que le bits rechercher vaut 0
-		bits = 0;
-
-	// On enregistre le bit 2^0 du caractère dans le nombre binaire R (RGB)
-	*r = bitFaible(*r,bits);
-	*m = *m + 1;
-
-	/*---------------------------------------------*/
-	if (*m == 7) // On a encoder les 7 bits du caractère
-	{
-		*m = 0;
-		*f = *f + 1; // on passe au caractère suivant
-	}
-	if ((masq[*m]&fichier[*f]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-		bits = 1;
-	else
-		bits = 0;
-
-	*g = bitFaible(*g,bits);
-	*m = *m + 1;
-
-	/*----------------------------------------*/
-	if (*m == 7) // On a encoder les 7 bits du caractère
-	{
-		m = 0;
-		*f = *f + 1; // on passe au caractère suivant
-	}
-	if ((masq[*m]&fichier[*f]) != 0)// si le nombre vaut une valeure différente de zero c'est que le bits restant vaut 1
-            bits = 1;
-    else
-            bits = 0;
-
-	*b = bitFaible(*b,bits);
-	*m = *m + 1;
 }
 
 long sizeFile(char *nom)

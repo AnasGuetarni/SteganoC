@@ -78,31 +78,10 @@ int main(int argc, char **argv) {
     
     extractionFichier(fichier);
 
-	//int test = 0;
-
-	// 1) Il faudra vérifier que l'on peut coder tout le fichier dans l'image
-
-	// Reduce image's first quadrant's brightness intensity
 	for (int j = 0; j < img->height; j++) {
 		for (int i = 0; i < img->width; i++) {
 			pixel_t *p = &img->pix[j][i];
-			
-			/*printf("r avant : %x \n",p->r);
-			printf("g avant : %x \n",p->g);
-			printf("b avant : %x \n",p->b);
-			printf("fichier : %x, numero : %d \n", fichier[f], f);
-			scanf("%d", &test);
-			printf("\n");*/
-			
-			ecritureRGB(fichier, &p->r,&p->g,&p->b,&m,&f);
-			
-			/*printf("r apres : %x \n",p->r);
-			printf("g apres : %x \n",p->g);
-			printf("b apres : %x \n",p->b);
-			printf("fichier : %x, numero : %d \n", fichier[f], f);
-			scanf("%d", &test);
-			printf("\n");*/
-			
+			ecritureRGB(fichier, &p->r,&p->g,&p->b,&m,&f,size);
 		}
 	}
 	

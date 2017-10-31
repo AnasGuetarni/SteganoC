@@ -1,4 +1,4 @@
-GCC=gcc -g -Wall -Wextra -std=gnu11
+GCC=gcc -g -Wall -Wextra -std=c99 -Werror
 
 encode: encode.o encode_function.o ppm.o
 	$(GCC) $^ -o $@
