@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "encode_function.h"
+#include "decode_function.h"
 
 // Cette fonction remplace par 0 ou par 1 le bit de poids faible dans
 // un nombre binaire donnée
@@ -107,7 +107,7 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 	}
 }
 
-long sizeFile(char *nom)
+long writeFile(char *nom)
 {
     FILE *fichier;
     long size;
