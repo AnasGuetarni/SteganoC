@@ -3,7 +3,7 @@
 #include <string.h>
 #include "encode_function.h"
 
-// Cette fonction remplace par 0 ou par 1 le bit de poids faible dans 
+// Cette fonction remplace par 0 ou par 1 le bit de poids faible dans
 // un nombre binaire donnée
 // nb : nombre binaire , bits: 0 ou 1
 unsigned char bitFaible(unsigned char nb, int bits)
@@ -22,7 +22,7 @@ unsigned char bitFaible(unsigned char nb, int bits)
     return resultat;
 }
 
-// ouverture fichier + extraction 
+// ouverture fichier + extraction
 void extractionFichier(unsigned char *c)
 {
 	int i =0;
@@ -32,17 +32,17 @@ void extractionFichier(unsigned char *c)
 
     if (fichier != NULL)
     {
-	while (caractere != EOF)
-	{
-		caractere = fgetc(fichier);
-		c[i] = caractere;
-		i++;
-	}
+			while (caractere != EOF)
+			{
+				caractere = fgetc(fichier);
+				c[i] = caractere;
+				i++;
+			}
     }
     else
     {
         // On affiche un message d'erreur
-        printf("Impossible d'ouvrir le fichier coucou.txt");
+        printf("Impossible d'ouvrir le fichier gulliver.txt");
     }
 
 	fclose(fichier);
@@ -58,7 +58,7 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 	int bits=0;
 
 	//printf("m : %d, f : %d \n", *m, *f);
-	
+
 	// Test qui permet d'arréter l'encodage quand tous les cartère on été encodé
 	if(*f < taille)
 	{
@@ -72,11 +72,11 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 			bits = 1;
 		else // si tous les bits sont a zero c'est que le bits rechercher vaut 0
 			bits = 0;
-	
+
 		// On enregistre le bit 2^0 du caractère dans le nombre binaire R (RGB)
 		*r = bitFaible(*r,bits);
 		*m = *m + 1;
-	
+
 		/*---------------------------------------------*/
 		if (*m == 7) // On a encoder les 7 bits du caractère
 		{
@@ -87,10 +87,10 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 			bits = 1;
 		else
 			bits = 0;
-	
+
 		*g = bitFaible(*g,bits);
 		*m = *m + 1;
-	
+
 		/*----------------------------------------*/
 		if (*m == 7) // On a encoder les 7 bits du caractère
 		{
@@ -101,7 +101,7 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 	            bits = 1;
 	    else
 	            bits = 0;
-	
+
 		*b = bitFaible(*b,bits);
 		*m = *m + 1;
 	}
@@ -111,14 +111,14 @@ long sizeFile(char *nom)
 {
     FILE *fichier;
     long size;
- 
+
     fichier=fopen(nom,"rb");
- 
+
     if(fichier)
     {
             fseek(fichier, 0, SEEK_END);
             size=ftell(fichier);
-            fclose (fichier);          
+            fclose (fichier);
     }
     return size;
 }

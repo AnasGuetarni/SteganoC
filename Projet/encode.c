@@ -59,10 +59,11 @@ int main(int argc, char **argv) {
 	// Load image
 	img_t *img = load_ppm(input);
 	if (!img) {
-		fprintf(stderr, "Failed loading \"%s\"!\n", input);
-		return EXIT_FAILURE;
+		fprintf(stderr, "Failed loading \"%s\"!\n", input); // Si l'on arrive pas a charger l'image
+		return EXIT_FAILURE; // On retourne une erreur
 	}
 
+	// On affiche la taille de l'image
 	printf("Height: %d\n", img->height);
 	printf("Width: %d\n", img->width);
 
@@ -76,31 +77,35 @@ int main(int argc, char **argv) {
         exit(0); // On arrête immédiatement le programme
     }
 
-		if ((size*3)<=(img->height*img->width)){
+		if ((size*3)<=(img->height*img->width)){ // si la taille du fichier est plus petite que la taille de l'image
 			printf("La taille du texte est plus grande que la capacité de l'image\n");
-			exit(0);
+			exit(0); // si c'est plus plus grand on arrete le programme
 		}
 		else
-			printf("La taille du texte est plus petite que la taille de l'image (C'est bon !)\n");
+			printf("La taille du texte est plus petite que la taille de l'image (C'est bon !)\n"); // sinon on continue le programme
 
+		// On va alors extraire les caractères du fichier
     extractionFichier(fichier);
 
-	for (int j = 0; j < img->height; j++) {
-		for (int i = 0; i < img->width; i++) {
-			pixel_t *p = &img->pix[j][i];
-			ecritureRGB(fichier, &p->r,&p->g,&p->b,&m,&f,size);
+
+	// On parcours toute l'image et applique la fonction ecritureRGB
+	for (int j = 0; j < img->height; j++) { // On parcours l'image sur la hauteur
+		for (int i = 0; i < img->width; i++) { // On parcours l'image dans sa largeur
+			pixel_t *p = &img->pix[j][i]; //On place dans une structure les valeurs des pixels
+			ecritureRGB(fichier, &p->r,&p->g,&p->b,&m,&f,size); // On écrit l'encodage sur le fichier en question
 		}
 	}
 
-	free(fichier);
+	free(fichier); // On libère le fichier
 
 	// Write image
 	if (!write_ppm(output, img, type)) {
-		fprintf(stderr, "Failed writing \"%s\"!\n", output);
-		free_img(img);
-		return EXIT_FAILURE;
+		fprintf(stderr, "Failed writing \"%s\"!\n", output); // Si l'on arrive pas a écrire sur l'image
+		free_img(img); // On libere l'espace alloué a l'image
+		return EXIT_FAILURE; // On retourne une erreur
 	}
 
-	free_img(img);
-	return EXIT_SUCCESS;
+	// Si l'on arrive a écrire sur l'image
+	free_img(img); // On libere l'espace alloué à l'image
+	return EXIT_SUCCESS; // On retourne un succès
 }
