@@ -57,6 +57,8 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 	// On considére que le bits 2^0 du caractére ira en premier dans le bit de poids faible de R. L'ordre est le suivant R->G->B
 	int bits=0;
 
+	//printf("m : %d, f : %d \n", *m, *f);
+
 	// Test qui permet d'arréter l'encodage quand tous les cartère on été encodé
 	if(*f < taille)
 	{

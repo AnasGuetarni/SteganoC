@@ -17,6 +17,9 @@
 #include <string.h>
 #include "encode_function.h"
 #include "ppm.h"
+#include <pthread.h>
+
+#define NUM_THREADS 10
 
 /**
  * Display the program's syntaxe.
@@ -26,35 +29,67 @@
 int convertDecimalToBinary(int n);
 
 void usage(char **argv) {
-	fprintf(stderr, "usage: %s [-ascii] input output\n"\
-			"Where input and output are PPM files and the optional argument\n"\
-            "-ascii specifies to write a plain text PPM file.\n", basename(argv[0]));
+	fprintf(stderr, "usage: %s -- encode text_file input_image output_image thread_count where input_image and output_image are PPM files and thread_count the number of threads to use\n", basename(argv[0]));
 	exit(EXIT_FAILURE);
 }
 
-/**
- * Program entry point.
- * @param argc command line argument count
- * @param argv program's command line arguments
- */
+void *thread(void *thread_id) {
+        int id = *((int *) thread_id);
+        //printf("Hello from thread %d\n", id);
+        return NULL;
+}
+
 int main(int argc, char **argv) {
 	char *input, *output;
+	char *nbT;
+	char *fileInput;
 	enum PPM_TYPE type;
 	int m = 0, f = 0;
 
-	// Parse command line
-	if (argc == 3) {
-		type = PPM_BINARY;
-		input = argv[1];
-		output = argv[2];
-	} else if (argc ==  4) {
-		if (strcmp("-ascii", argv[1]) != 0) usage(argv);
-		type = PPM_ASCII;
-		input = argv[2];
-		output = argv[3];
-	} else {
-		usage(argv);
+	struct intervalle {
+		int intervalMin;
+		int intervalMax;
+	};
+
+	if (argc > 5)
+	{
+		printf("Le nombre d'argument est supérieur au nombre demandé\n");
+		exit(EXIT_FAILURE);
 	}
+
+	type = PPM_BINARY;
+	fileInput = argv[1];
+	input = argv[2];
+	output = argv[3];
+	nbT = argv[4];
+
+	*nbT = *((int *) nbT);
+
+	long size = sizeFile(fileInput);
+
+	double value = size / NUM_THREADS;
+	printf("La valeur pour chaque thread est de: %f\n",value);
+
+	pthread_t threads[NUM_THREADS];
+	int tab[NUM_THREADS];
+	for (int i = 0; i < NUM_THREADS; i++) {
+	    tab[i] = i;
+	    int code = pthread_create(&threads[i], NULL, thread, &tab[i]);
+
+			if(pthread_join(threads[i], NULL) != 0) {
+		     printf("pthread_join\n");
+		     return EXIT_FAILURE;
+		  }
+
+	    if (code != 0) {
+        fprintf(stderr, "pthread_create failed!\n");
+        return EXIT_FAILURE;
+	    }
+    }
+    pthread_exit(NULL);
+    return EXIT_SUCCESS;
+
+
 
 	// Load image
 	img_t *img = load_ppm(input);
@@ -67,7 +102,6 @@ int main(int argc, char **argv) {
 	printf("Height: %d\n", img->height);
 	printf("Width: %d\n", img->width);
 
-	long size = sizeFile("gulliver.txt");
 	printf("taille :  %ld \n", size);
 
 	unsigned char *fichier = NULL;
@@ -102,7 +136,6 @@ bool end = false;
 			else
 			{
 				end = true;
-				printf("Sortie de boucle\n");
 			}
 		}
 	}
