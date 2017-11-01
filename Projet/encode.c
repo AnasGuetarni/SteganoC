@@ -88,15 +88,21 @@ int main(int argc, char **argv) {
     extractionFichier(fichier);
 
 int old = 7;
+bool end = false;
 
 	// On parcours toute l'image et applique la fonction ecritureRGB
-	for (int j = 0; j < img->height; j++) { // On parcours l'image sur la hauteur
-		for (int i = 0; i < img->width; i++) { // On parcours l'image dans sa largeur
+	for (int j = 0; j < img->height && end != true; j++) { // On parcours l'image sur la hauteur
+		for (int i = 0; i < img->width && end != true; i++) { // On parcours l'image dans sa largeur
 			pixel_t *p = &img->pix[j][i]; //On place dans une structure les valeurs des pixels
 			if (m != old)
 			{
 				old = m;
 				ecritureRGB(fichier, &p->r,&p->g,&p->b,&m,&f,size); // On écrit l'encodage sur le fichier en question
+			}
+			else
+			{
+				end = true;
+				printf("Sortie de boucle\n");
 			}
 		}
 	}

@@ -27,7 +27,7 @@ int convertDecimalToBinary(int n);
 
 void usage(char **argv) {
 	fprintf(stderr, "usage: %s [-ascii] input output\n"\
-			"Where input and output are PPM files and the optional argument\n"\
+			"Where input is a PPM file and output is a text file and the optional argument\n"\
             "-ascii specifies to write a plain text PPM file.\n", basename(argv[0]));
 	exit(EXIT_FAILURE);
 }
@@ -67,9 +67,6 @@ int main(int argc, char **argv) {
 	printf("Height: %d\n", img->height);
 	printf("Width: %d\n", img->width);
 
-	long size = sizeFile("gulliver.txt");
-	printf("taille :  %ld \n", size);
-
 	unsigned char *fichier = NULL;
 	fichier = malloc(size*sizeof(unsigned char));
     if (fichier == NULL) // Si l'allocation a échoué
@@ -87,31 +84,14 @@ int main(int argc, char **argv) {
 		// On va alors extraire les caractères du fichier
     extractionFichier(fichier);
 
-int old = 7;
 
 	// On parcours toute l'image et applique la fonction ecritureRGB
 	for (int j = 0; j < img->height; j++) { // On parcours l'image sur la hauteur
 		for (int i = 0; i < img->width; i++) { // On parcours l'image dans sa largeur
 			pixel_t *p = &img->pix[j][i]; //On place dans une structure les valeurs des pixels
-			if (m != old)
-			{
-				old = m;
-				ecritureRGB(fichier, &p->r,&p->g,&p->b,&m,&f,size); // On écrit l'encodage sur le fichier en question
-			}
+			ecritureRGB(fichier, &p->r,&p->g,&p->b,&m,&f,size); // On écrit l'encodage sur le fichier en question
 		}
 	}
 
-  writeFile(unsigned char *fichier);
-	free(fichier); // On libère le fichier
-
-	// Write image
-	if (!write_ppm(output, img, type)) {
-		fprintf(stderr, "Failed writing \"%s\"!\n", output); // Si l'on arrive pas a écrire sur l'image
-		free_img(img); // On libere l'espace alloué a l'image
-		return EXIT_FAILURE; // On retourne une erreur
-	}
-
-	// Si l'on arrive a écrire sur l'image
-	free_img(img); // On libere l'espace alloué à l'image
-	return EXIT_SUCCESS; // On retourne un succès
+  writeFile(unsigned char *fichier, output);
 }

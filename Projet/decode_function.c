@@ -22,32 +22,6 @@ unsigned char bitFaible(unsigned char nb, int bits)
     return resultat;
 }
 
-// ouverture fichier + extraction
-void extractionFichier(unsigned char *c)
-{
-	int i =0;
-    int caractere = 0;
-    FILE* fichier = NULL;
-    fichier = fopen("gulliver.txt", "r");
-
-    if (fichier != NULL)
-    {
-			while (caractere != EOF)
-			{
-				caractere = fgetc(fichier);
-				c[i] = caractere;
-				i++;
-			}
-    }
-    else
-    {
-        // On affiche un message d'erreur
-        printf("Impossible d'ouvrir le fichier gulliver.txt");
-    }
-
-	fclose(fichier);
-}
-
 void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsigned char *b, int *m, int *f, long taille)
 {
 	// masque pour extraire les bits des valeurs RGB une par une  UTILISATION D'UN (ET) LOGIQUE
@@ -107,18 +81,17 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 	}
 }
 
-long writeFile(char *nom)
+void writeFile(unsigned char *fichier, char output)
 {
-    FILE *fichier;
-    long size;
+    output=fopen(output,"rb");
 
-    fichier=fopen(nom,"rb");
+    int i=0;
 
-    if(fichier)
+    while(fichier[i] != 'EOF')
     {
-            fseek(fichier, 0, SEEK_END);
-            size=ftell(fichier);
-            fclose (fichier);
+            fwrite(fichier[i], i, sizeof(ficher[i]),output);
+            i++;
     }
-    return size;
+
+    return output;
 }

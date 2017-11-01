@@ -9,8 +9,18 @@ encode.o: encode.c
 encode_function.o: encode_function.c encode_function.h
 	$(GCC) $< -c
 
-pm.o: ppm.c ppm.h
+decode: decode.o decode_function.o ppm.o
+	$(GCC) $^ -o $@
+
+decode.o: decode.c
 	$(GCC) $< -c
+
+decode_function.o: decode_function.c decode_function.h
+	$(GCC) $< -c
+
+pm.o: ppm.c ppm.h
+		$(GCC) $< -c
 
 clean:
 	rm -f *.o encode
+	rm -f *.o decode
