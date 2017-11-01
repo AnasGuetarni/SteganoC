@@ -39,17 +39,17 @@ void usage(char **argv) {
  */
 int main(int argc, char **argv) {
 	char *input, *output;
-	enum PPM_TYPE type;
+	//enum PPM_TYPE type;
 	int m = 0, f = 0;
 
 	// Parse command line
 	if (argc == 3) {
-		type = PPM_BINARY;
+		//type = PPM_BINARY;
 		input = argv[1];
 		output = argv[2];
 	} else if (argc ==  4) {
 		if (strcmp("-ascii", argv[1]) != 0) usage(argv);
-		type = PPM_ASCII;
+		//type = PPM_ASCII;
 		input = argv[2];
 		output = argv[3];
 	} else {
@@ -81,11 +81,11 @@ int main(int argc, char **argv) {
 			lectureRGB(caracExtrait, &p->r, &p->g, &p->b, &m, &f);
 		}
 	}
-	
+
 	writeFile(caracExtrait, output);
-	
+
 	free(caracExtrait); // On libère le fichier
 	free_img(img); // On libere l'espace alloué à l'image
-	
+
 	return EXIT_SUCCESS; // On retourne un succès
 }

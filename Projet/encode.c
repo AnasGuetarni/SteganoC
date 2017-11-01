@@ -19,7 +19,7 @@
 #include "ppm.h"
 #include <pthread.h>
 
-#define NUM_THREADS 10
+#define NUM_THREADS 5
 
 /**
  * Display the program's syntaxe.
@@ -35,7 +35,7 @@ void usage(char **argv) {
 
 void *thread(void *thread_id) {
         int id = *((int *) thread_id);
-        //printf("Hello from thread %d\n", id);
+        printf("Hello from thread %d\n", id);
         return NULL;
 }
 
@@ -47,9 +47,11 @@ int main(int argc, char **argv) {
 	int m = 0, f = 0;
 
 	struct intervalle {
-		int intervalMin;
-		int intervalMax;
+		int intervalMin[NUM_THREADS];
+		int intervalMax[NUM_THREADS];
 	};
+
+	struct intervalle intervalleT;
 
 	if (argc > 5)
 	{
@@ -68,7 +70,21 @@ int main(int argc, char **argv) {
 	long size = sizeFile(fileInput);
 
 	double value = size / NUM_THREADS;
+	printf("Size: %lu\n", size);
 	printf("La valeur pour chaque thread est de: %f\n",value);
+
+	for(int i=1;i<NUM_THREADS+1;i++){
+		if(i==1)
+			intervalleT.intervalMin[i] = value * (i-1);
+		else
+			intervalleT.intervalMin[i] = value * (i-1) + 1;
+		intervalleT.intervalMax[i] = value * i;
+		printf("intervalMin: %i / intervalMax: %i\n",intervalleT.intervalMin[i],intervalleT.intervalMax[i]);
+	}
+
+	printf("En dehors de la boucle\n");
+	printf("Valeur de intervalMin: %i\n", intervalleT.intervalMin[0]);
+
 
 	pthread_t threads[NUM_THREADS];
 	int tab[NUM_THREADS];
