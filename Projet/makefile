@@ -1,4 +1,4 @@
-GCC=gcc -g -Wall -Wextra -std=c99 -Werror
+GCC=gcc -g -Wall -Wextra -std=c99
 
 all: encode decode
 
@@ -24,5 +24,4 @@ pm.o: ppm.c ppm.h
 		$(GCC) $< -c
 
 clean:
-	rm -f *.o encode
-	rm -f *.o decode
+	rm -f *.o encode decode
