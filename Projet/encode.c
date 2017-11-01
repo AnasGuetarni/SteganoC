@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
         exit(0); // On arrête immédiatement le programme
     }
 
-		if ((size*3)<=(img->height*img->width)){ // si la taille du fichier est plus petite que la taille de l'image
+		if ((size*2)>=(img->height*img->width)){ // si la taille du fichier est plus petite que la taille de l'image
 			printf("La taille du texte est plus grande que la capacité de l'image\n");
 			exit(0); // si c'est plus plus grand on arrete le programme
 		}

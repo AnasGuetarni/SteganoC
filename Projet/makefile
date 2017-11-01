@@ -1,5 +1,7 @@
 GCC=gcc -g -Wall -Wextra -std=c99 -Werror
 
+all: encode decode
+
 encode: encode.o encode_function.o ppm.o
 	$(GCC) $^ -o $@
 

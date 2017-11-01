@@ -1,4 +1,4 @@
-#include <stdio.h>
+/*#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "decode_function.h"
@@ -36,7 +36,7 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 	// Test qui permet d'arréter l'encodage quand tous les cartère on été encodé
 	if(*f < taille)
 	{
-		/*-------------------------------------------*/
+
 		if (*m == 7) // On a encoder les 7 bits du caractère
 		{
 			*m = 0;
@@ -51,7 +51,6 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 		*r = bitFaible(*r,bits);
 		*m = *m + 1;
 
-		/*---------------------------------------------*/
 		if (*m == 7) // On a encoder les 7 bits du caractère
 		{
 			*m = 0;
@@ -65,7 +64,6 @@ void ecritureRGB(unsigned char *fichier,unsigned char *r, unsigned char *g, unsi
 		*g = bitFaible(*g,bits);
 		*m = *m + 1;
 
-		/*----------------------------------------*/
 		if (*m == 7) // On a encoder les 7 bits du caractère
 		{
 			*m = 0;
@@ -95,3 +93,20 @@ void writeFile(unsigned char *fichier, char output)
 
     return output;
 }
+
+long sizeFile(char *nom)
+{
+    FILE *fichier;
+    long size;
+
+    fichier=fopen(nom,"rb");
+
+    if(fichier)
+    {
+            fseek(fichier, 0, SEEK_END);
+            size=ftell(fichier);
+            fclose (fichier);
+    }
+    return size;
+}
+*/
