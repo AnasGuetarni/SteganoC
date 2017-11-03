@@ -11,6 +11,7 @@
  * convert -compress none image.jpg output.ppm
  */
 
+#include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
@@ -18,8 +19,11 @@
 #include "encode_function.h"
 #include "ppm.h"
 #include <pthread.h>
+#include <errno.h>
+#include <math.h>
 
-#define NUM_THREADS 5
+#define NUM_THREADS 50
+#define BITS_PER_CHAR 7
 
 /**
  * Display the program's syntaxe.
@@ -39,6 +43,31 @@ void *thread(void *thread_id) {
         return NULL;
 }
 
+int max_char_encode(img_t *img){
+	return floor((img->height * img->width) * sizeof(pixel_t) / BITS_PER_CHAR);
+}
+
+// off_t fsize(const char *filename){
+//     struct stat st;
+//
+//     if (stat(filename, &st) == 0)
+//         return st.st_size;
+//
+//     fprintf(stderr, "Cannot determine size of %s: %s\n",
+//             filename, strerror(errno));
+//
+//     return -1;
+// }
+
+unsigned long fsize(char* file)
+{
+    FILE * f = fopen(file, "r");
+    fseek(f, 0, SEEK_END);
+    unsigned long len = (unsigned long)ftell(f);
+    fclose(f);
+    return len;
+}
+
 int main(int argc, char **argv) {
 	char *input, *output;
 	char *nbT;
@@ -46,12 +75,19 @@ int main(int argc, char **argv) {
 	enum PPM_TYPE type;
 	int m = 0, f = 0;
 
-	struct intervalle {
+	typedef struct intervalle_st {
 		int intervalMin[NUM_THREADS];
 		int intervalMax[NUM_THREADS];
-	};
+		img_t **img_out;
+	} interval_t;
 
-	struct intervalle intervalleT;
+	// typedef struct param_st {
+	// 	int thread_id;
+	// 	char *text_cut;
+	// 	img_t **img_out;
+	// } param_t;
+
+	interval_t intervalleT;
 
 	if (argc > 5)
 	{
@@ -66,6 +102,18 @@ int main(int argc, char **argv) {
 	nbT = argv[4];
 
 	*nbT = *((int *) nbT);
+
+	img_t *img;
+	img = load_ppm(input);
+	int max_char = max_char_encode(img);
+	printf("max_char: %i\n", max_char);
+	int nb_char = fsize(fileInput);
+	printf("nb_char: %i\n", nb_char);
+
+	if (nb_char > max_char){
+		printf("Fichier texte trop long pour l'image\n");
+		exit(0);
+	}
 
 	long size = sizeFile(fileInput);
 
@@ -82,11 +130,14 @@ int main(int argc, char **argv) {
 		printf("intervalMin: %i / intervalMax: %i\n",intervalleT.intervalMin[i],intervalleT.intervalMax[i]);
 	}
 
-	printf("En dehors de la boucle\n");
-	printf("Valeur de intervalMin: %i\n", intervalleT.intervalMin[0]);
+	//printf("En dehors de la boucle\n");
+	//printf("Valeur de intervalMin: %i\n", intervalleT.intervalMin[0]);
 
 
 	pthread_t threads[NUM_THREADS];
+	// pthread_t *threads = malloc(sizeof(pthread_t) * nb_threads);//(pthread_t*)malloc(sizeof(pthread_t)); //malloc(sizeof(pthread_t) * nb_threads);
+	// param_t *threads_param = malloc(sizeof(param_t) * nb_threads);//(param_t*)malloc(sizeof(param_t));//malloc(sizeof(param_t) * nb_threads);
+
 	int tab[NUM_THREADS];
 	for (int i = 0; i < NUM_THREADS; i++) {
 	    tab[i] = i;
@@ -108,7 +159,7 @@ int main(int argc, char **argv) {
 
 
 	// Load image
-	img_t *img = load_ppm(input);
+	//img_t *img = load_ppm(input);
 	if (!img) {
 		fprintf(stderr, "Failed loading \"%s\"!\n", input); // Si l'on arrive pas a charger l'image
 		return EXIT_FAILURE; // On retourne une erreur
@@ -126,13 +177,6 @@ int main(int argc, char **argv) {
     {
         exit(0); // On arrête immédiatement le programme
     }
-
-		if ((size*2)>=(img->height*img->width)){ // si la taille du fichier est plus petite que la taille de l'image
-			printf("La taille du texte est plus grande que la capacité de l'image\n");
-			exit(0); // si c'est plus plus grand on arrete le programme
-		}
-		else
-			printf("La taille du texte est plus petite que la taille de l'image (C'est bon !)\n"); // sinon on continue le programme
 
 		// On va alors extraire les caractères du fichier
     extractionFichier(fichier);
